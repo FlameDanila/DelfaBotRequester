@@ -83,21 +83,20 @@ namespace DelfaTestBot
                         Select($"update usersRequest set counter = 2 where id = '{username}'");
                         break;
                     }
-                    if (ss.Text != "" && Counter == 2 && Block == 1 && ss.Text != back )
+                    if (ss.Text != "" && Counter == 2 && Block == 1 && ss.Text != back  || ss.Text == back && Counter == 4 && Block == 1)
                     {
-
-                        await client.SendTextMessageAsync(ss.Chat.Id, "Можете написать, почему вы выбрали именно эту оценку?", replyMarkup: EmptyAnsver());
-                        if (ss.Text == back) { }
+                        await client.SendTextMessageAsync(ss.Chat.Id, "Можете написать, почему вы выбрали именно эту оценку?", replyMarkup: EmptyAnsver2());
+                        if (ss.Text == back || ss.Text == "Начать заново") { }
                         else
                         {
-                            ansver = ss.Text;
+                            Select($"update usersRequest set score = '{ss.Text}' where id = '{username}'");
                         }
                         Select($"update usersRequest set counter = 3 where id = '{username}'");
                         break;
                     }
                     if (ss.Text != "" && Counter == 3 && Block == 1 || ss.Text == back && Counter == 4 && Block == 1)
                     {
-
+                        Select($"update usersRequest set ansver = '{ss.Text}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "Спасибо за ваш отзыв.\nВот перечень профессий, среди которых Вы точно найдёте что-то по вкусу😋", replyMarkup: Question3Buttons());
                         Select($"update usersRequest set counter = 4 where id = '{username}'");
                         break;
@@ -134,9 +133,8 @@ namespace DelfaTestBot
 
                         break;
                     }
-                    if (ss.Text == "Летняя IT-школа☀" && Counter == 1 && Block == 2 || ss.Text == "Летняя IT-школа☀" && Counter == 0 || ss.Text == back && Counter == 2 && Block == 3)
+                    if (ss.Text == "Летняя IT-школа☀" && Counter == 1 && Block == 2 || ss.Text == "Летняя IT-школа☀" && Counter == 0 || ss.Text == back && Counter == 2 && Block == 3 || ss.Text == back && Counter == 7 && Block == 3)
                     {
-
                         await client.SendTextMessageAsync(ss.Chat.Id, "Проведи активное лето с учебным центром Дельфа.\nСамые интересные и актуальные направления только у нас!", replyMarkup: Question7Buttons());
                         Select($"update usersRequest set counter = 1 where id = '{username}'");;
                         Select($"update usersRequest set block = 3 where id = '{username}'");
@@ -144,15 +142,19 @@ namespace DelfaTestBot
                     }
                     if (ss.Text == "Направления" && Counter == 1 && Block == 3 || ss.Text == back && Counter == 3 && Block == 3)
                     {
-
                         await client.SendTextMessageAsync(ss.Chat.Id, "Выберите направление: ", replyMarkup: Question8Buttons());
                         Select($"update usersRequest set counter = 2 where id = '{username}'");;
                         break;
                     }
+                    if (ss.Text == "Расписание смен📆" && Counter == 1 && Block == 3)
+                    {
+                        await client.SendTextMessageAsync(ss.Chat.Id, "Июль\n3 поток\n04.07 - 15.07\n4 поток\n18.07 - 29.07\n\nАвгуст\n5 поток\n01.08 - 12.08\n6 поток\n15.08 - 26.08", replyMarkup: EmptyAnsver());
+                        Select($"update usersRequest set counter = 7 where id = '{username}'"); ;
+                        break;
+                    }
                     if (ss.Text == "Системное администрирование 12+" && Counter == 2 && Block == 3 || ss.Text == back && Counter == 4 && Block == 3)
                     {
-
-                        requestProfession = ss.Text;
+                        Select($"update usersRequest set selectedProfession = '{ss.Text}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "На занятиях школы «Системного администрирования» ребята разберутся с тем, как устроен компьютер, а также научатся проводить техническое обслуживание и ремонт компьютерной техники.\n\n(12 - 16 лет)\n\nПолный день\nc 9:00 до 17:00\n19 000 руб\n\nНеполный день\nс 11:00 до 15:00\n13 000 руб - смена(10 дней)", replyMarkup: request1Stage());
                         Select($"update usersRequest set counter = 3 where id = '{username}'");;
  
@@ -160,8 +162,7 @@ namespace DelfaTestBot
                     }
                     if (ss.Text == "Play studio 8+" && Counter == 2 && Block == 3 || ss.Text == back && Counter == 4 && Block == 3)
                     {
-
-                        requestProfession = ss.Text;
+                        Select($"update usersRequest set selectedProfession = '{ss.Text}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "«Play Studio» - Комплекс занятий направленных на выявление скрытого творческого потенциала ребёнка.\nДети попробуют себя в самых разных сферах, в том числе:\n-робототехнике;\n-химии;\n-авиа-моделировании;\n-режиссуре.\n\n(8-10 лет)\n\nПолный день\nc 9:00 до 17:00\n19 000 руб - смена (10 дней)\n\nНеполный день\nс 09:00 до 13:00\n13 000 руб - смена (10 дней)", replyMarkup: request1Stage());
                         Select($"update usersRequest set counter = 3 where id = '{username}'");;
  
@@ -169,8 +170,7 @@ namespace DelfaTestBot
                     }
                     if (ss.Text == "Школа видеоблогера 11+" && Counter == 2 && Block == 3 || ss.Text == back && Counter == 4 && Block == 3)
                     {
-
-                        requestProfession = ss.Text;
+                        Select($"update usersRequest set selectedProfession = '{ss.Text}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "На занятиях «Школы видеоблогера» ребенок не только активно задействует свой творческий потенциал, но и научится основам видеосъемки и монтажа и создаст свои видеоролики для социальных сетей\n\n(11 - 14 лет)\n\nПолный день\nc 9:00 до 17:00\n19 000 руб - смена(10 дней)\n\nНеполный день\nс 11:00 до 15:00\n13 000 руб - смена(10 дней)", replyMarkup: request1Stage());
                         Select($"update usersRequest set counter = 3 where id = '{username}'");;
  
@@ -178,8 +178,7 @@ namespace DelfaTestBot
                     }
                     if (ss.Text == "Школа GameDev 11+" && Counter == 2 && Block == 3 || ss.Text == back && Counter == 4 && Block == 3)
                     {
-
-                        requestProfession = ss.Text;
+                        Select($"update usersRequest set selectedProfession = '{ss.Text}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "В летней IT- школе «Разработка игр» ребят ждут нереально крутые занятия – погружение в виртуальный мир программирования и 3D-моделирования.\n\nНа уроках гейм - дизайна дети проявят свою фантазию, создавая миры и собственную Вселенную, а также продумают и реализуют игру для Android.\n\n(11 - 14 лет)\n\nПолный день\nc 9:00 до 17:00\n19 000 руб - смена(10 дней)\n\nНеполный день\nс 11:00 до 15:00\n13 000 руб - смена(10 дней)", replyMarkup: request1Stage());
                         Select($"update usersRequest set counter = 3 where id = '{username}'");;
  
@@ -187,17 +186,15 @@ namespace DelfaTestBot
                     }
                     if (ss.Text == "Мобильная фотография 11+" && Counter == 2 && Block == 3 || ss.Text == back && Counter == 4 && Block == 3)
                     {
-
-                        requestProfession = ss.Text;
-                        await client.SendTextMessageAsync(ss.Chat.Id, "Курс предназначен для фотолюбителей, которые стремятся получать отличные фотографии с помощью современных смартфонов.\n\nНа курсе ребята детально изучат все необходимые правила, чтобы создавать свои собственные шедевры.\n\n(11 - 14 лет)\n\nПолный деньn\nc 9:00 до 17:00\n19 000 руб - смена(10 дней)\n\nНеполный день\nс 11:00 до 15:00\n13 000 руб - смена(10 дней)", replyMarkup: request1Stage());
+                        Select($"update usersRequest set selectedProfession = '{ss.Text}' where id = '{username}'");
+                        await client.SendTextMessageAsync(ss.Chat.Id, "Курс предназначен для фотолюбителей, которые стремятся получать отличные фотографии с помощью современных смартфонов.\n\nНа курсе ребята детально изучат все необходимые правила, чтобы создавать свои собственные шедевры.\n\n(11 - 14 лет)\n\nПолный день\nc 9:00 до 17:00\n19 000 руб - смена(10 дней)\n\nНеполный день\nс 11:00 до 15:00\n13 000 руб - смена(10 дней)", replyMarkup: request1Stage());
                         Select($"update usersRequest set counter = 3 where id = '{username}'");;
  
                         break;
                     }
                     if (ss.Text == "Школа инжиниринга умных вещей 12+" && Counter == 2 && Block == 3 || ss.Text == back && Counter == 4 && Block == 3)
                     {
-
-                        requestProfession = ss.Text;
+                        Select($"update usersRequest set selectedProfession = '{ss.Text}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "На смене «Школы инжиниринга умных вещей» ребята поработают над изобретательскими проектами по созданию устройств и систем для организации «умного дома», научатся 3D-моделированию и программированию микроконтроллеров на C++.\n\n(12 - 16 лет)\n\nПолный день\nc 9:00 до 17:00\n19 000 руб - смена(10 дней)\n\nНеполный день\nс 11:00 до 15:00\n13 000 руб - смена(10 дней) ", replyMarkup: request1Stage());
                         Select($"update usersRequest set counter = 3 where id = '{username}'");;
  
@@ -212,11 +209,10 @@ namespace DelfaTestBot
                     }
                     if (ss.Text != "" && Counter == 4 && Block == 3)
                     {
-
-                        requestPhone = ss.Text;
-                        requestName = name;
+                        Select($"update usersRequest set phoneNumber = '{ss.Text}' where id = '{username}'");
+                        Select($"update usersRequest set name = '{name}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "Спасибо за заявку, мы позвоним Вам в ближайшее время, чтобы обсудить условия обучения.", replyMarkup: EmptyAnsver());
-                        await SendMessage();
+                        await SendMessage(username.ToString());
                         Select($"update usersRequest set counter = 5 where id = '{username}'");;
  
                         break;
@@ -263,8 +259,7 @@ namespace DelfaTestBot
                     }
                     if (ss.Text == "Ремонт компьютеров🔧" && Counter == 1 && Block == 4 || ss.Text == back && Counter == 3 && Block == 4)
                     {
-
-                        requestProfession = ss.Text;
+                        Select($"update usersRequest set selectedProfession = '{ss.Text}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "Если Вы являетесь нашим клиентом, то у Вас есть возможность принести свой компьютер на диагностику к дипломированному специалисту.🎓\n\nПосле тщательной проверки и в случае выявления проблем мы осуществим мелкий ремонт.🛠\nБЕСПЛАТНО.", replyMarkup: request2Stage());
                         Select($"update usersRequest set counter = 2 where id = '{username}'");;
 
@@ -278,18 +273,18 @@ namespace DelfaTestBot
                     }
                     if (ss.Text != "" && Counter == 3 && Block == 4)
                     {
-                        requestPhone = ss.Text;
-                        requestName = name;
+                        Select($"update usersRequest set phoneNumber = '{ss.Text}' where id = '{username}'");
+                        Select($"update usersRequest set name = '{name}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "Спасибо за заявку, мы позвоним Вам в ближайшее время, чтобы обсудить условия ремонта.", replyMarkup: EmptyAnsver());
-                        await SendMessage();
+                        await SendMessage(username.ToString());
                         Select($"update usersRequest set counter = 4 where id = '{username}'");;
 
                         break;
                     }
                     if (ss.Text == "Вернуть налоговый вычет🏦" && Counter == 1 && Block == 4 || ss.Text == back && Counter == 6 && Block == 4)
                     {
-                        requestProfession = ss.Text;
-                        await client.SendTextMessageAsync(ss.Chat.Id, "Так как мы имеем лицензию в сфере образовательной деятельности Вы можете вернуть налоговый вычет 13(смайл процента) от стоимости обучения.\nТак же, мы можем помочь, абсолютно бесплатно, подготовить для Вас полный пакет документов(3 НДФЛ Декларацию) для подачи в налоговую.", replyMarkup: request2Stage());
+                        Select($"update usersRequest set selectedProfession = '{ss.Text}' where id = '{username}'");
+                        await client.SendTextMessageAsync(ss.Chat.Id, "Так как мы имеем лицензию в сфере образовательной деятельности Вы можете вернуть налоговый вычет 13％ от стоимости обучения.\nТак же, мы можем помочь, абсолютно бесплатно, подготовить для Вас полный пакет документов(3 НДФЛ Декларацию) для подачи в налоговую.", replyMarkup: request2Stage());
                         Select($"update usersRequest set counter = 5 where id = '{username}'"); ;
 
                         break;
@@ -302,17 +297,17 @@ namespace DelfaTestBot
                     }
                     if (ss.Text != "" && Counter == 6 && Block == 4)
                     {
-                        requestPhone = ss.Text;
-                        requestName = name;
+                        Select($"update usersRequest set phoneNumber = '{ss.Text}' where id = '{username}'");
+                        Select($"update usersRequest set name = '{name}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "Спасибо за заявку, мы позвоним Вам в ближайшее время, чтобы обсудить условия возврата.", replyMarkup: EmptyAnsver());
-                        await SendMessage();
+                        await SendMessage(username.ToString());
                         Select($"update usersRequest set counter = 7 where id = '{username}'"); ;
 
                         break;
                     }
                     if (ss.Text == "Аренда конференц зала💵" && Counter == 1 && Block == 4 || ss.Text == back && Counter == 9 && Block == 4)
                     {
-                        requestProfession = ss.Text;
+                        Select($"update usersRequest set selectedProfession = '{ss.Text}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "https://delfa72.ru/arenda-konfernts-zala/Prays_arenda.pdf\n"+
                             "Место проведения Зал№ 1 (2этаж)\nПонедельник - пятница\n9:00 - 18:00 18:00 - 23:00  \n1000 руб./ч 1500 руб./ч\n\nСуббота\nот 1ч до 5ч Свыше 5ч\n1500руб./ч 1300руб./ч \n\nВоскресенье \nот 1ч до 5ч Свыше 5ч\n1900руб./ч 1700руб./ч", replyMarkup: request2Stage());
                         Select($"update usersRequest set counter = 8 where id = '{username}'"); ;
@@ -327,10 +322,10 @@ namespace DelfaTestBot
                     }
                     if (ss.Text != "" && Counter == 9 && Block == 4)
                     {
-                        requestPhone = ss.Text;
-                        requestName = name;
+                        Select($"update usersRequest set phoneNumber = '{ss.Text}' where id = '{username}'");
+                        Select($"update usersRequest set name = '{name}' where id = '{username}'");
                         await client.SendTextMessageAsync(ss.Chat.Id, "Спасибо за заявку, мы позвоним Вам в ближайшее время, чтобы обсудить условия аренды.", replyMarkup: EmptyAnsver());
-                        await SendMessage();
+                        await SendMessage(username.ToString());
                         Select($"update usersRequest set counter = 10 where id = '{username}'"); ;
 
                         break;
@@ -355,10 +350,23 @@ namespace DelfaTestBot
                 default: return null;                  // let WTelegramClient decide the default config
             }
         }
-        private static async Task SendMessage()
+        private static async Task SendMessage(string userId)
         {
             try
             {
+            DataTable user = await Select($"select selectedProfession, phoneNumber, name from userrequest whete id = '{userId}'");
+
+            string NameOfUser = "";
+            string profession = "";
+            string phone = "";
+
+            for (int i = 0; i < user.Rows.Count; i++)
+            {
+                NameOfUser = user.Rows[i][2].ToString();
+                profession = user.Rows[i][0].ToString();
+                phone = user.Rows[i][1].ToString();
+            }
+
                 var wTLClient = new WTelegram.Client(Config);
                 var my = await wTLClient.LoginUserIfNeeded();
                 var resolved = await wTLClient.Contacts_ResolvePhone($"89199400273"); // username without the @
@@ -395,8 +403,8 @@ namespace DelfaTestBot
             {
                 Keyboard = new List<List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton>>
                 {
-                    new List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton> { new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "★★★★★" }, new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "★★★★☆" } },
-                    new List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton> { new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "★★★☆☆" }, new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "★★☆☆☆" }, new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "★☆☆☆☆" } },
+                    new List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton> { new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "5" }, new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "4" } },
+                    new List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton> { new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "3" }, new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "2" }, new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "1" } },
                     new List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton> { new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = back }, new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "Начать заново" } }
                 }
             };
@@ -430,6 +438,17 @@ namespace DelfaTestBot
             {
                 Keyboard = new List<List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton>>
                 {
+                    new List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton> { new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = back }, new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "Начать заново" } }
+                }
+            };
+        }
+        private static IReplyMarkup EmptyAnsver2()
+        {
+            return new Telegram.Bot.Types.ReplyMarkups.ReplyKeyboardMarkup
+            {
+                Keyboard = new List<List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton>>
+                {                   
+                    new List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton> { new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "Не хочу!" }},
                     new List<Telegram.Bot.Types.ReplyMarkups.KeyboardButton> { new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = back }, new Telegram.Bot.Types.ReplyMarkups.KeyboardButton { Text = "Начать заново" } }
                 }
             };
