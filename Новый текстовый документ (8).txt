@@ -1,0 +1,3 @@
+https://tlgrm.ru/docs/api/obtaining_api_id
+
+https://corefork.telegram.org/methods
